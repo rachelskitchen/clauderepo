@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id            String         @id @default(cuid())
+  oloCustomerId String         @unique
+  email         String?
+  phone         String?
+  name          String?
+  createdAt     DateTime       @default(now())
+
+  baskets       Basket[]
+  loyaltyEvents LoyaltyEvent[]
+  campaignSends CampaignSend[]
+}
+
+enum BasketStatus {
+  OPEN
+  ORDERED
+  ABANDONED
+  RECOVERED
+}
+
+model Basket {
+  id         String   @id @default(cuid())
+  oloBasketId String  @unique
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+  items      Json
+  subtotal   Float
+  status     BasketStatus @default(OPEN)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  order             Order?
+  recoveryAttempts  RecoveryAttempt[]
+}
+
+model Order {
+  id         String   @id @default(cuid())
+  oloOrderId String   @unique
+  basketId   String   @unique
+  basket     Basket   @relation(fields: [basketId], references: [id])
+  total      Float
+  placedAt   DateTime
+
+  loyaltyEvents LoyaltyEvent[]
+}
+
+enum LoyaltyEventType {
+  ACCRUAL
+  REDEMPTION
+}
+
+model LoyaltyEvent {
+  id         String           @id @default(cuid())
+  customerId String
+  customer   Customer         @relation(fields: [customerId], references: [id])
+  type       LoyaltyEventType
+  points     Int
+  orderId    String?
+  order      Order?           @relation(fields: [orderId], references: [id])
+  occurredAt DateTime
+}
+
+enum RecoveryChannel {
+  EMAIL
+  SMS
+}
+
+model RecoveryAttempt {
+  id           String          @id @default(cuid())
+  basketId     String
+  basket       Basket          @relation(fields: [basketId], references: [id])
+  channel      RecoveryChannel
+  sentAt       DateTime        @default(now())
+  discountCode String
+  converted    Boolean         @default(false)
+}
+
+model Campaign {
+  id                 String   @id @default(cuid())
+  name               String
+  segmentDefinition  Json
+  variants           Json
+  startsAt           DateTime
+  endsAt             DateTime?
+
+  sends CampaignSend[]
+}
+
+model CampaignSend {
+  id         String    @id @default(cuid())
+  campaignId String
+  campaign   Campaign  @relation(fields: [campaignId], references: [id])
+  customerId String
+  customer   Customer  @relation(fields: [customerId], references: [id])
+  variant    String
+  sentAt     DateTime  @default(now())
+  openedAt   DateTime?
+  redeemedAt DateTime?
+}
