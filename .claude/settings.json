@@ -5,7 +5,8 @@
       "mcp__Google_Drive__download_file_content",
       "mcp__Google_Drive__search_files",
       "mcp__Gmail__get_message",
-      "mcp__Google_Drive__get_file_metadata"
+      "mcp__Google_Drive__get_file_metadata",
+      "mcp__Google_Drive__create_file"
     ]
   }
 }
