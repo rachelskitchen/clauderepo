@@ -8,7 +8,9 @@
       "mcp__Google_Drive__get_file_metadata",
       "mcp__Google_Drive__create_file",
       "mcp__Gmail__label_message",
-      "mcp__Gmail__send_message"
+      "mcp__Gmail__send_message",
+      "Bash",
+      "Write"
     ]
   }
 }
