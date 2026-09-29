@@ -9,6 +9,9 @@
       "mcp__Google_Drive__create_file",
       "mcp__Gmail__label_message",
       "mcp__Gmail__send_message",
+      "mcp__Gmail__get_thread",
+      "mcp__Gmail__list_labels",
+      "mcp__Gmail__create_label",
       "Bash",
       "Write"
     ]
