@@ -13,7 +13,8 @@
       "mcp__Gmail__list_labels",
       "mcp__Gmail__create_label",
       "Bash",
-      "Write"
+      "Write",
+      "PushNotification"
     ]
   }
 }
